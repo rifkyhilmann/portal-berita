@@ -20,8 +20,6 @@ model User {
   password   String    @db.Text
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
-
-  articles   Article[]
 }
 
 model Category {
@@ -38,7 +36,6 @@ model Article {
   title        String    @db.VarChar(255)
   slug         String    @unique @db.VarChar(255)
   content      String    @db.Text
-  author_id    String    @db.Uuid
   category_id  String    @db.Uuid
   image_url    String?   @db.Text
   published_at DateTime?
@@ -46,6 +43,5 @@ model Article {
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now()) @updatedAt
 
-  author       User      @relation(fields: [author_id], references: [id])
   category     Category  @relation(fields: [category_id], references: [id])
 }
