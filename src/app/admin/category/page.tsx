@@ -7,10 +7,12 @@ import { ApiResponse, CategoryProps } from "@/types/data.types";
 import { showDialog, showToast } from "@/utils/alert.utils";
 import { Breadcrumb, Table } from "antd"
 import Link from "next/link";
+import { useState } from "react";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa"
 import { MdOutlineSearch } from "react-icons/md"
 
 const Page = () => {
+    const [search, setSearch] = useState("");
     const { data, refetch } = useFetch<ApiResponse<CategoryProps>>(
         '/api/category', "GET");
 
@@ -67,6 +69,12 @@ const Page = () => {
         }
     };
 
+    const filteredData = Array.isArray(data?.data)
+        ? data.data.filter((item) => 
+            item.name.toLowerCase().includes(search.toLowerCase())
+        )
+        : [];
+
     return (
         <LayoutAdmin>
             <Breadcrumb 
@@ -83,9 +91,11 @@ const Page = () => {
                     <Input 
                         type="text"
                         placeholder="Search"
-                        className="w-[90%] max-w-[200px] h-9"
+                        className="w-[90%] max-w-[200px] h-8"
                         size="small"
                         icon={<MdOutlineSearch className="mr-1 text-gray-300 text-lg" />}
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                     />
                     <Link href={'/admin/category/create'}>
                         <button
@@ -100,7 +110,7 @@ const Page = () => {
                 </div>
                 <div className="h-max w-full">
                     <Table 
-                        dataSource={Array.isArray(data?.data) ? data.data : []}
+                        dataSource={filteredData}
                         columns={columns}
                         rowKey="id"
                         pagination={{

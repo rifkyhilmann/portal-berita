@@ -9,11 +9,23 @@ import Link from "next/link";
 import { MdOutlineFolder } from "react-icons/md";
 import { Formik, Form } from "formik";
 import { ValidationCategory } from "@/validation/category.schema";
+import { useParams } from "next/navigation";
+import { ApiResponse, CategoryProps } from "@/types/data.types";
+import { useEffect, useState } from "react";
 
 const Page = () => {
+    const { id } = useParams();
+    const { data, refetch } = useFetch<ApiResponse<CategoryProps>>(`/api/category?id=${id}`, "GET");
+
+    const [initialValues, setInitialValues] = useState({
+        name : '',
+    })
+
+    console.log(data);
+
     const { refetch: createCategory, loading } = useFetch<{ message: string; status: number }>(
         "/api/category",
-        "POST",
+        "PUT",
         null,
         undefined,
         true 
@@ -21,16 +33,25 @@ const Page = () => {
 
     const handleSubmit = async (values: { name: string }, { resetForm }: { resetForm: () => void }) => {
         try {
-            const response = await createCategory("/api/category", { name: values.name });
+
+            const response = await createCategory(`/api/category?id=${id}`, { name: values.name });
 
             if (response?.status === 200) {
-                showToast("success", "Success!");
-                resetForm(); 
+                showToast("success", "Success!"); 
+                refetch();
             }
         } catch (error) {
             showDialog("error", "Error", "Gagal menyimpan kategori!");
         }
     };
+
+    useEffect(() => {
+        if (data) {
+            setInitialValues({
+                name : data.data.name
+            })
+        }
+    }, [id, data])
 
     return (
         <LayoutAdmin>
@@ -41,18 +62,19 @@ const Page = () => {
                         className: "font-medium text-black",
                     },
                     {
-                        title: "Create",
+                        title: "Update",
                         className: "font-medium text-gray-600",
                     },
                 ]}
             />
 
             <div className="content-box">
-                <h1 className="text-sm font-medium">Create Category</h1>
+                <h1 className="text-sm font-medium">Update Category</h1>
                 <Formik
-                    initialValues={{ name: "" }}
+                    initialValues={initialValues}
                     validationSchema={ValidationCategory}
                     onSubmit={handleSubmit}
+                    enableReinitialize
                 >
                     {({ values, errors, touched, handleChange, handleReset }) => (
                         <Form>
