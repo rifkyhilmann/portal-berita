@@ -30,7 +30,7 @@ const SidebarMenu = ({
                                 >
                                     <div 
                                         className={`w-full h-10 flex items-center px-3
-                                            ${item.url === pathname ? 'bg-black text-white' : 'bg-transparent'}
+                                            ${item.url === pathname || pathname.startsWith(item.url) ? 'bg-black text-white' : 'bg-transparent'}
                                             hover:bg-black hover:text-white rounded-lg
                                             `}
                                     >

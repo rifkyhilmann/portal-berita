@@ -7,3 +7,11 @@
 .btn-action {
     @apply h-8 w-8 rounded-lg cursor-pointer text-white text-xs  flex items-center justify-center
 }
+
+.content-box {
+    @apply w-full h-max bg-white shadow-md rounded-lg p-5 flex flex-col gap-5;
+}
+
+.btn-action-form {
+    @apply px-3 h-8 text-xs text-white rounded-lg cursor-pointer;
+}

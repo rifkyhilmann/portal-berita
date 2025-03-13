@@ -46,21 +46,21 @@ const Page = () => {
         }
     ]
 
-    const { refetch: deleteCategory, data : deleteData } = useFetch<ApiResponse<CategoryProps>>(
+    const { refetch: deleteCategory } = useFetch<ApiResponse<CategoryProps>>(
         "/api/category", 
         "DELETE", 
         null, 
         undefined, 
-        true // ⬅️ Mode manual fetch
+        true 
     );
 
     const handleDelete = async (id: string) => {
         try {
-            const res = await deleteCategory(`/api/category?id=${id}`); // ✅ Kirim URL yang benar
+            const res = await deleteCategory(`/api/category?id=${id}`); 
             
             if (res?.status === 200) {
                 showToast("success", "Delete Data Success!");
-                refetch(); // 🔄 Refresh data setelah delete
+                refetch(); 
             }
         } catch (error) {
             showDialog("error", "Error", "Error deleting");
@@ -73,12 +73,12 @@ const Page = () => {
                 items={[
                     {
                         title: "Category",
-                        className : 'font-medium text-lg'
+                        className : 'font-medium '
                     }
                 ]}
             />
 
-            <div className="w-full h-max bg-white shadow-md rounded-lg p-5 flex flex-col gap-5">
+            <div className="content-box">
                 <div className="h-10 w-full  flex justify-between">
                     <Input 
                         type="text"
@@ -87,14 +87,16 @@ const Page = () => {
                         size="small"
                         icon={<MdOutlineSearch className="mr-1 text-gray-300 text-lg" />}
                     />
-                    <button
-                        className="btn-table"
-                    >
-                        <FaPlus />
-                        <p className="md:flex hidden">
-                            Tambah
-                        </p>
-                    </button>
+                    <Link href={'/admin/category/create'}>
+                        <button
+                            className="btn-table"
+                        >
+                            <FaPlus />
+                            <p className="md:flex hidden">
+                                Create
+                            </p>
+                        </button>
+                    </Link>
                 </div>
                 <div className="h-max w-full">
                     <Table 

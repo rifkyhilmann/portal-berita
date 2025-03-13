@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 
 const useFetch = <T,>(
-    initialUrl: string, 
-    method: "GET" | "POST" | "PUT" | "DELETE", 
-    body?: any, 
-    token?: string, 
-    manual = false 
+    initialUrl: string,
+    method: "GET" | "POST" | "PUT" | "DELETE",
+    initialBody?: any,
+    token?: string,
+    manual = false
 ) => {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchData = useCallback(async (url = initialUrl): Promise<T | null> => {
+    const fetchData = useCallback(async (url = initialUrl, body = initialBody): Promise<T | null> => {
         setLoading(true);
         setError(null);
 
@@ -30,14 +30,14 @@ const useFetch = <T,>(
 
             const result: T = await response.json();
             setData(result);
-            return result; // ✅ Kembalikan data langsung
+            return result;
         } catch (err) {
             setError((err as Error).message);
             return null;
         } finally {
             setLoading(false);
         }
-    }, [initialUrl, method, body, token]);
+    }, [initialUrl, method, initialBody, token]);
 
     useEffect(() => {
         if (!manual && method === "GET") {
@@ -49,4 +49,5 @@ const useFetch = <T,>(
 };
 
 export default useFetch;
+
 

@@ -9,16 +9,9 @@ import { MdArticle, MdFolder } from "react-icons/md"
 
 
 const Page = () => {
-    const { data, loading, error } = useFetch<ApiResponse<DashboardStatsProps>>("/api/dashboard-stats", "GET");
+    const { data } = useFetch<ApiResponse<DashboardStatsProps>>("/api/dashboard-stats", "GET");
 
-    if (loading) {
-        return <p>Loading...</p>
-    }
-
-    if (error) {
-        return <p>Error...</p>
-    }
-
+    
     const dashboardCards = [
         { 
             title: "Jumlah Published", 
@@ -43,7 +36,7 @@ const Page = () => {
                 items={[
                     {
                         title: "Dashboard",
-                        className : 'font-medium text-lg'
+                        className : 'font-medium '
                     }
                 ]}
             />
