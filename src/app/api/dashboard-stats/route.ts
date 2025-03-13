@@ -17,9 +17,9 @@ export const GET = async () => {
         const countCategory = await prisma.category.count();
 
         const data = {
-            countPublished,
-            countDraft,
-            countCategory
+            published : countPublished,
+            draft :countDraft,
+            category : countCategory
         };
         
         return createResponse(200, 'success', data);

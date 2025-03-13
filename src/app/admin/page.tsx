@@ -1,11 +1,25 @@
 "use client"
 
 import LayoutAdmin from "@/components/template/LayoutAdmin"
+import useFetch from "@/hooks/useFetch"
+import { ApiResponse, DashboardStatsProps } from "@/types/data.types"
 import { Breadcrumb } from "antd"
 import { MdArticle, MdFolder, MdOutlineArticle } from "react-icons/md"
 
 
 const Page = () => {
+    const { data, loading, error } = useFetch<ApiResponse<DashboardStatsProps>>("/api/dashboard-stats", "GET");
+
+    if (loading) {
+        return <p>Loadin...</p>
+    }
+
+    if (error) {
+        return <p>Error...</p>
+    }
+
+    console.log(data);
+
     return (
         <LayoutAdmin>
             <Breadcrumb 
@@ -23,7 +37,7 @@ const Page = () => {
                     </div>
                     <div className="flex flex-col items-center  ">
                         <h1 className="text-sm">Jumlah Published</h1>
-                        <h1 className="text-sm font-semibold">0</h1>
+                        <h1 className="text-sm font-semibold">{data?.data.published ? data.data.published : 0}</h1>
                     </div>
                 </div>
                 <div className="h-[150px] w-full bg-white shadow flex flex-col justify-center gap-4 items-center p-5 rounded-lg">

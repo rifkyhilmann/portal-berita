@@ -1,45 +1,54 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-const useFetch = <T,>(url: string, options?: RequestInit) => {
+const useFetch = <T,>(
+    url: string, 
+    method: "GET" | "POST" | "PUT" | "DELETE", 
+    body?: any, 
+    token?: string // Token sebagai parameter opsional
+) => {
     const [data, setData] = useState<T | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        let isMounted = true;
-        
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const result: T = await response.json();
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
 
-                if (isMounted) {
-                    setData(result);
-                }
-                
-            } catch (err) {
-                if (isMounted) {
-                    setError((err as Error).message);
-                }
-            } finally {
-                if (isMounted) {
-                    setLoading(false);
-                }
+        try {
+            const headers: HeadersInit = {
+                "Content-Type": "application/json",
+            };
+
+            // Jika ada token, tambahkan ke headers
+            if (token) {
+                headers["Authorization"] = `Bearer ${token}`;
             }
-        };
 
-        fetchData();
+            const options: RequestInit = {
+                method,
+                headers,
+                body: body ? JSON.stringify(body) : undefined,
+            };
 
-        return () => {
-            isMounted = false;
-        };
-    }, [url]);
+            const response = await fetch(url, options);
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-    return { data, loading, error };
+            const result: T = await response.json();
+            setData(result);
+        } catch (err) {
+            setError((err as Error).message);
+        } finally {
+            setLoading(false);
+        }
+    }, [url, method, body, token]);
+
+    useEffect(() => {
+        if (method === "GET") {
+            fetchData();
+        }
+    }, [fetchData]);
+
+    return { data, loading, error, refetch: fetchData };
 };
 
 export default useFetch;
