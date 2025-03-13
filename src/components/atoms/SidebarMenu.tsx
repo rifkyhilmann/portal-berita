@@ -20,27 +20,29 @@ const SidebarMenu = ({
             {type === 'submenu' ? (
                 <div className='flex flex-col gap-2'>
                     <span className='text-sm font-medium'>{title}</span>
-                    <Each 
-                        of={submenu !== undefined ? submenu : []}
-                        render={(item, i) => (
-                            <Link
-                                href={item.url ? item.url : '#'}
-                                key={i}
-                            >
-                                <div 
-                                    className={`w-full h-10 flex items-center px-3
-                                        ${item.url === pathname ? 'bg-black text-white' : 'bg-transparent'}
-                                        hover:bg-black hover:text-white rounded-lg
-                                        `}
+                    <div className='flex flex-col gap-1'>
+                        <Each 
+                            of={submenu !== undefined ? submenu : []}
+                            render={(item, i) => (
+                                <Link
+                                    href={item.url ? item.url : '#'}
+                                    key={i}
                                 >
-                                    <div className='flex items-center justify-center h-10 w-10 '>
-                                        {item.Icon && <item.Icon className="text-lg" />}   
+                                    <div 
+                                        className={`w-full h-10 flex items-center px-3
+                                            ${item.url === pathname ? 'bg-black text-white' : 'bg-transparent'}
+                                            hover:bg-black hover:text-white rounded-lg
+                                            `}
+                                    >
+                                        <div className='flex items-center justify-center h-10 w-10 '>
+                                            {item.Icon && <item.Icon className="text-lg" />}   
+                                        </div>
+                                        <p className="text-sm font-medium">{item.title}</p>
                                     </div>
-                                    <p className="text-sm font-medium">{item.title}</p>
-                                </div>
-                            </Link>
-                        )}
-                    />
+                                </Link>
+                            )}
+                        />
+                    </div>
                 </div>
             ) : (
                 <Link href={url ? url : '#'}>

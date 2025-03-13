@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.btn-table {
+    @apply h-9 px-3 bg-black text-xs text-white rounded shadow-md flex items-center gap-2 justify-center cursor-pointer hover:opacity-80;
+}
+
+.btn-action {
+    @apply h-8 w-8 rounded-lg cursor-pointer text-white text-xs  flex items-center justify-center
+}

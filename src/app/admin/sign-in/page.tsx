@@ -75,7 +75,7 @@ const Page = () => {
                                     type="email"
                                     value={values.email}
                                     onChange={handleChange}
-                                    icon={<MailOutlined style={ { color: "#D3D3D3" } } className="mr-1 text-gray-200" />}
+                                    icon={<MailOutlined  className="mr-1 text-gray-200" />}
                                 /> 
                                 {touched.email && errors.email && (
                                     <div className="text-red-500 text-[10px]">{errors.email}</div>
@@ -89,7 +89,7 @@ const Page = () => {
                                     type="password"
                                     value={values.password}
                                     onChange={handleChange}
-                                    icon={<MdOutlineLock style={ { color: "#D3D3D3" } } className="mr-1 text-gray-200" />}
+                                    icon={<MdOutlineLock className="mr-1 text-gray-200" />}
                                 />  
                                 {touched.password && errors.password && (
                                     <div className="text-red-500 text-[10px]">{errors.password}</div>

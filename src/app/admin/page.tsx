@@ -5,7 +5,7 @@ import useFetch from "@/hooks/useFetch"
 import { ApiResponse, DashboardStatsProps } from "@/types/data.types"
 import Each from "@/utils/each.utils"
 import { Breadcrumb } from "antd"
-import { MdArticle, MdFolder, MdOutlineArticle } from "react-icons/md"
+import { MdArticle, MdFolder } from "react-icons/md"
 
 
 const Page = () => {
