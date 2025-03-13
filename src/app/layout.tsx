@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from "@/components/template/Providers";
+import AntdStyled from "@/components/template/AntStyled";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],  // Array berat font yang didukung
+  subsets: ["latin"],  // Menentukan subset yang diinginkan (misalnya latin)
 });
 
 export const metadata: Metadata = {
@@ -25,9 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className} antialiased`}
       >
-        {children}
+        <AntdStyled>
+          <Providers>
+            {children}
+          </Providers>
+        </AntdStyled>
       </body>
     </html>
   );

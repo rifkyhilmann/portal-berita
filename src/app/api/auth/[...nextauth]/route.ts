@@ -8,16 +8,20 @@ const handler = NextAuth({
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: { label: "Email", type: "email", placeholder: "Email" },
+                email: { label: "Email", type: "email", placeholder: "Email" },
                 password: { label: "Password", type: "password", placeholder: "Password" },
             },
             async authorize(credentials) {
+                if (!credentials?.email || !credentials?.password) {
+                    throw new Error("Email dan password harus diisi!");
+                }
+                
                 const user = await prisma.user.findUnique({
-                    where: { email: credentials?.username }
+                    where: { email: credentials?.email }
                 })
 
                 if (!user) {
-                    throw new Error('User not found');
+                    throw new Error('Email belum terdaftar!!!');
                 }
 
                 const isPasswordValid = credentials?.password ? await bcrypt.compare(credentials.password, user.password) : false;
@@ -50,7 +54,7 @@ const handler = NextAuth({
         },
         async session({ session, token }) {
             session.user = {
-                
+                ...session.user,
             };
             return session;
         },
