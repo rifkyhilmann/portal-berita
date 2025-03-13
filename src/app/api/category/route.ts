@@ -76,15 +76,23 @@ export const DELETE = async (request : Request) => {
         if (!category) {
             return createResponse(401, "Category not found");
         }
-
+        
+        await prisma.article.deleteMany({
+            where : {
+                category_id : id
+            }
+        });
+        
         await prisma.category.delete({
             where : {
                 id : id
             }
         })
 
+
         return createResponse(200, 'succees');
     } catch (error) {
+        console.log(error);
         return createResponse(500, "Internal Server Error");
     }
 }

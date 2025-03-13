@@ -4,13 +4,15 @@ import Input from "@/components/atoms/Input"
 import LayoutAdmin from "@/components/template/LayoutAdmin"
 import useFetch from "@/hooks/useFetch"
 import { ApiResponse, CategoryProps } from "@/types/data.types";
+import { showDialog, showToast } from "@/utils/alert.utils";
 import { Breadcrumb, Table } from "antd"
 import Link from "next/link";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa"
 import { MdOutlineSearch } from "react-icons/md"
 
 const Page = () => {
-    const { data } = useFetch<ApiResponse<CategoryProps>>('/api/category', "GET");
+    const { data, refetch } = useFetch<ApiResponse<CategoryProps>>(
+        '/api/category', "GET");
 
     const columns = [
         {
@@ -33,13 +35,37 @@ const Page = () => {
                             <FaPen />
                         </button>
                     </Link>
-                    <button className="btn-action bg-gray-700 hover:bg-gray-800 ">
+                    <button 
+                        onClick={() => handleDelete(record.id)} 
+                        className="btn-action bg-gray-700 hover:bg-gray-800 "
+                    >
                         <FaTrash />
                     </button>
                 </div>
             )
         }
     ]
+
+    const { refetch: deleteCategory, data : deleteData } = useFetch<ApiResponse<CategoryProps>>(
+        "/api/category", 
+        "DELETE", 
+        null, 
+        undefined, 
+        true // ⬅️ Mode manual fetch
+    );
+
+    const handleDelete = async (id: string) => {
+        try {
+            const res = await deleteCategory(`/api/category?id=${id}`); // ✅ Kirim URL yang benar
+            
+            if (res?.status === 200) {
+                showToast("success", "Delete Data Success!");
+                refetch(); // 🔄 Refresh data setelah delete
+            }
+        } catch (error) {
+            showDialog("error", "Error", "Error deleting");
+        }
+    };
 
     return (
         <LayoutAdmin>

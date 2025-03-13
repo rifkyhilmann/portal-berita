@@ -1,28 +1,23 @@
 import { useState, useEffect, useCallback } from "react";
 
 const useFetch = <T,>(
-    url: string, 
+    initialUrl: string, 
     method: "GET" | "POST" | "PUT" | "DELETE", 
     body?: any, 
-    token?: string // Token sebagai parameter opsional
+    token?: string, 
+    manual = false 
 ) => {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchData = useCallback(async () => {
+    const fetchData = useCallback(async (url = initialUrl): Promise<T | null> => {
         setLoading(true);
         setError(null);
 
         try {
-            const headers: HeadersInit = {
-                "Content-Type": "application/json",
-            };
-
-            // Jika ada token, tambahkan ke headers
-            if (token) {
-                headers["Authorization"] = `Bearer ${token}`;
-            }
+            const headers: HeadersInit = { "Content-Type": "application/json" };
+            if (token) headers["Authorization"] = `Bearer ${token}`;
 
             const options: RequestInit = {
                 method,
@@ -35,20 +30,23 @@ const useFetch = <T,>(
 
             const result: T = await response.json();
             setData(result);
+            return result; // ✅ Kembalikan data langsung
         } catch (err) {
             setError((err as Error).message);
+            return null;
         } finally {
             setLoading(false);
         }
-    }, [url, method, body, token]);
+    }, [initialUrl, method, body, token]);
 
     useEffect(() => {
-        if (method === "GET") {
+        if (!manual && method === "GET") {
             fetchData();
         }
-    }, [fetchData]);
+    }, [fetchData, manual, method]);
 
     return { data, loading, error, refetch: fetchData };
 };
 
 export default useFetch;
+
