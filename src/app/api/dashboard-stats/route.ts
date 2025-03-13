@@ -2,7 +2,7 @@ import prisma from "@/utils/prisma"
 import { createResponse } from "@/utils/response";
 
 
-export const GET = async (request : Request) => {
+export const GET = async () => {
     try {
         const countPublished = await prisma.article.count({
             where: { status: "published" }
