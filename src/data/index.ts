@@ -1,3 +1,4 @@
+import { AiOutlineBarChart } from "react-icons/ai";
 import { MdOutlineDashboard, MdOutlineArticle, MdOutlineFolder, MdOutlineSettings } from "react-icons/md";
 
 export const DataMenuSidebar = [
@@ -21,6 +22,17 @@ export const DataMenuSidebar = [
                 url: "/admin/articles",
                 Icon: MdOutlineArticle,
             },
+        ],
+    },
+    {
+        title: "Analytics",
+        type: "submenu",
+        submenu: [
+            {
+                title: "Anlytics",
+                url: "/admin/analytics",
+                Icon: AiOutlineBarChart,
+            }
         ],
     },
     {

@@ -84,6 +84,9 @@ export const GET = async (request : Request) => {
             articles = await prisma.article.findUnique({
                 where : {
                     id : id
+                },
+                include : {
+                    category : true
                 }
             })
         } else if (category) {
@@ -92,7 +95,11 @@ export const GET = async (request : Request) => {
                 include: { category: true },
             });
         } else {
-            articles = await prisma.article.findMany();
+            articles = await prisma.article.findMany({
+                include : {
+                    category : true
+                }
+            });
         }
 
         if (!articles) {
