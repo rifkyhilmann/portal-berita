@@ -3,7 +3,8 @@
 import Input from '@/components/atoms/Input';
 import LayoutAdmin from '@/components/template/LayoutAdmin'
 import useFetch from '@/hooks/useFetch';
-import { ApiResponse, CategoryProps } from '@/types/data.types';
+import { ApiResponse, ArticlesProps } from '@/types/data.types';
+import { showDialog, showToast } from '@/utils/alert.utils';
 import { Breadcrumb, Breakpoint, Table } from 'antd'
 import Link from 'next/link';
 import React, { useState } from 'react'
@@ -12,7 +13,7 @@ import { MdOutlineSearch } from 'react-icons/md'
 
 const Page = () => {
     const [search, setSearch] = useState("");
-    const { data } = useFetch<ApiResponse<CategoryProps>>('/api/articles', 'GET');
+    const { data, refetch } = useFetch<ApiResponse<ArticlesProps>>('/api/articles', 'GET');
 
     const columns = [
         {
@@ -59,7 +60,7 @@ const Page = () => {
                         </button>
                     </Link>
                     <button 
-                        // onClick={() => handleDelete(record.id)} 
+                        onClick={() => handleDelete(record.id)} 
                         className="btn-action bg-gray-700 hover:bg-gray-800 "
                     >
                         <FaTrash />
@@ -74,6 +75,27 @@ const Page = () => {
             item.title.toLowerCase().includes(search.toLowerCase())
         )
         : [];
+
+    const { refetch: deleteArticles } = useFetch<ApiResponse<ArticlesProps>>(
+        "/api/articles", 
+        "DELETE", 
+        null, 
+        undefined, 
+        true 
+    );
+
+    const handleDelete = async (id : string) => {
+        try {
+            const res = await deleteArticles(`/api/articles?id=${id}`);
+
+            if (res?.status === 200) {
+                showToast('success', 'Delete data successfully');
+                refetch();
+            }
+        } catch (error) {
+            showDialog("error", "Error", "Error deleting");
+        }
+    }
  
     return (
         <LayoutAdmin>

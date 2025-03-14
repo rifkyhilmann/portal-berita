@@ -64,7 +64,7 @@ export const POST = async (request: Request) => {
             },
         });
 
-        return createResponse(201, "Article created successfully", article);
+        return createResponse(200, "successs", article);
     } catch (error) {
         console.error("Error creating article:", error);
         return createResponse(500, "Internal Server Error");

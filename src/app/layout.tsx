@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/template/Providers";
 import AntdStyled from "@/components/template/AntStyled";
+import '@ant-design/v5-patch-for-react-19';
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],  // Array berat font yang didukung

@@ -16,7 +16,7 @@ const useFetch = <T,>(
         setError(null);
 
         try {
-            const headers: HeadersInit = { "Content-Type": "application/json" };
+            const headers: HeadersInit = {};
             if (token) headers["Authorization"] = `Bearer ${token}`;
 
             const options: RequestInit = {
@@ -24,6 +24,13 @@ const useFetch = <T,>(
                 headers,
                 body: body ? JSON.stringify(body) : undefined,
             };
+
+            if (body instanceof FormData) {
+                options.body = body;
+            } else {
+                options.headers = { ...headers, "Content-Type": "application/json" };
+                options.body = JSON.stringify(body);
+            }
 
             const response = await fetch(url, options);
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);

@@ -36,3 +36,23 @@ export interface EachUtilsProps<T> {
     of: T[];
     render: (item: T, index: number) => ReactNode;
 }
+
+export interface SelectProps {
+    options: { value: string; label: string }[];
+    placeholder?: string;
+    onChange?: (value: string) => void;
+    onSearch?: (value: string) => void;
+}
+
+export interface SelectDropdownProps {
+    label : string;
+    placeholder: string;
+    options: { value: string; label: string }[];
+    onSelectChange: (value: string) => void;
+}
+
+export interface TextEditorProps {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+}
