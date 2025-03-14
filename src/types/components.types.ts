@@ -42,11 +42,13 @@ export interface SelectProps {
     placeholder?: string;
     onChange?: (value: string) => void;
     onSearch?: (value: string) => void;
+    value? : string;
 }
 
 export interface SelectDropdownProps {
     label : string;
     placeholder: string;
+    value : string;
     options: { value: string; label: string }[];
     onSelectChange: (value: string) => void;
 }

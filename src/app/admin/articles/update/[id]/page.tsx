@@ -2,7 +2,6 @@
 
 import InputField from "@/components/molecules/InputField"
 import SelectDropdown from "@/components/molecules/SelectDropdown";
-import UploadFile from "@/components/molecules/UploadFile";
 import LayoutAdmin from "@/components/template/LayoutAdmin"
 import { Breadcrumb } from "antd"
 import { Formik, Form } from "formik"
@@ -11,14 +10,18 @@ import '@ant-design/v5-patch-for-react-19';
 import useImageUpload from "@/hooks/useImageUpload";
 import useFetch from "@/hooks/useFetch";
 import { ApiResponse, ArticlesProps, CategoryProps } from "@/types/data.types";
-import Each from "@/utils/each.utils";
 import TextEditor from "@/components/molecules/TextEditor";
 import { showDialog, showToast } from "@/utils/alert.utils";
 import { ArticlesSchema } from "@/validation/articles.schema";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 
 const Page = () => {
-    const { image, handleImageChange } = useImageUpload();
+    const { id } = useParams();
+    const { data : dataArticles } = useFetch<ApiResponse<ArticlesProps>>(`/api/articles?id=${id}`, "GET");
+
+    const { image } = useImageUpload();
     const { data : dataCategory } = useFetch<ApiResponse<CategoryProps[]>>('/api/category', "GET");
 
     const categoryOptions = dataCategory?.data?.map((category : CategoryProps) => ({
@@ -26,7 +29,7 @@ const Page = () => {
         value: category.id
     })) || [];
 
-    const initialValues = {
+    const [initialValues, setInitialValues] = useState({
         title : "",
         slug : "",
         content : "",
@@ -34,7 +37,7 @@ const Page = () => {
         category_id : "",
         published_at : "",
         status : ""
-    }
+    });
 
     const { refetch } = useFetch<ApiResponse<ArticlesProps>>('/api/articles', "POST", undefined, undefined, true); 
 
@@ -75,6 +78,24 @@ const Page = () => {
         }
     };
 
+
+    useEffect(() => {
+        if (dataArticles) {
+            setInitialValues({
+                title : dataArticles.data.title,
+                slug : dataArticles.data.slug,
+                content : dataArticles.data.content,
+                image_url : undefined,
+                category_id : dataArticles.data.category_id,
+                published_at : dataArticles.data.published_at,
+                status : dataArticles.data.status
+            })
+        }
+    }, [id, dataArticles]);
+
+    console.log(dataArticles);
+    
+
     return (
         <LayoutAdmin>
             <Breadcrumb 
@@ -93,6 +114,7 @@ const Page = () => {
             <div className="content-box">
                 <h1 className="text-sm font-medium">Create Articles</h1>
                 <Formik
+                    enableReinitialize
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
                     validationSchema={ArticlesSchema}

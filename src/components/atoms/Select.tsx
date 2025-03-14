@@ -8,6 +8,7 @@ const Select = ({
     options, 
     placeholder, 
     onChange, 
+    value,
     onSearch 
 } : SelectProps) => {
     return (
@@ -16,6 +17,7 @@ const Select = ({
             placeholder={placeholder}
             optionFilterProp="label"
             onChange={onChange}
+            value={value}
             onSearch={onSearch}
             options={options}
         />

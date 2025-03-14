@@ -54,7 +54,7 @@ const Page = () => {
             key : "action",
             render: (_: unknown, record: any) => (
                 <div className="flex items-center gap-2">
-                    <Link href={`/admin/category/update/${record.id}`}>
+                    <Link href={`/admin/articles/update/${record.id}`}>
                         <button className="btn-action bg-purple-700 hover:bg-purple-800">
                             <FaPen />
                         </button>

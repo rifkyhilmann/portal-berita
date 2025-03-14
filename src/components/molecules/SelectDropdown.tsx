@@ -6,6 +6,7 @@ const SelectDropdown = ({
     options,
     onSelectChange,
     label,
+    value,
     placeholder
 } : SelectDropdownProps) => {
     return (
@@ -13,6 +14,7 @@ const SelectDropdown = ({
             <span className="text-xs ">{label}</span>
             <Select
                 options={options}
+                value={value}
                 onChange={onSelectChange}
                 placeholder={placeholder || "Select"}
             />
