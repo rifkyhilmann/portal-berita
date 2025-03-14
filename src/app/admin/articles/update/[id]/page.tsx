@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 
 const Page = () => {
     const { id } = useParams();
-    const { data : dataArticles } = useFetch<ApiResponse<ArticlesProps>>(`/api/articles?id=${id}`, "GET");
+    const { data : dataArticles, refetch : refetchData } = useFetch<ApiResponse<ArticlesProps>>(`/api/articles?id=${id}`, "GET");
 
     const { image } = useImageUpload();
     const { data : dataCategory } = useFetch<ApiResponse<CategoryProps[]>>('/api/category', "GET");
@@ -39,7 +39,7 @@ const Page = () => {
         status : ""
     });
 
-    const { refetch } = useFetch<ApiResponse<ArticlesProps>>('/api/articles', "POST", undefined, undefined, true); 
+    const { refetch } = useFetch<ApiResponse<ArticlesProps>>('/api/articles', "PUT", undefined, undefined, true); 
 
     const handleSubmit = async (values: { 
         title: string; 
@@ -63,14 +63,13 @@ const Page = () => {
                 formData.append("image_url", image);
             }
 
-            const response = await refetch('/api/articles', formData);
-
+            const response = await refetch('/api/articles', formData); 
 
             if (response?.status === 200) {
-                resetForm();
                 showToast("success", "Success!");
+                refetchData();
             }
- 
+            
 
         } catch (error) {
             console.log(error);
@@ -87,13 +86,13 @@ const Page = () => {
                 content : dataArticles.data.content,
                 image_url : undefined,
                 category_id : dataArticles.data.category_id,
-                published_at : dataArticles.data.published_at,
+                published_at: dataArticles.data.published_at
+                    ? new Date(dataArticles.data.published_at).toISOString().split("T")[0] 
+                    : "",
                 status : dataArticles.data.status
             })
         }
     }, [id, dataArticles]);
-
-    console.log(dataArticles);
     
 
     return (
@@ -105,19 +104,18 @@ const Page = () => {
                         className: "font-medium text-black",
                     },
                     {
-                        title: "Create",
+                        title: "Update",
                         className: "font-medium text-gray-600",
                     },
                 ]}
             />
 
             <div className="content-box">
-                <h1 className="text-sm font-medium">Create Articles</h1>
+                <h1 className="text-sm font-medium">Update Articles</h1>
                 <Formik
                     enableReinitialize
                     initialValues={initialValues}
-                    onSubmit={handleSubmit}
-                    validationSchema={ArticlesSchema}
+                    onSubmit={handleSubmit}         
                 >   
                     {({ values, errors, touched, handleChange, handleReset, setFieldValue, setTouched }) => (
                         <Form className="grid md:grid-cols-2 grid-cols-1 gap-5">

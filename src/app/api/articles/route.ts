@@ -209,9 +209,11 @@ export const PUT = async (request: Request) => {
             },
         });
 
-        return createResponse(200, "Article updated successfully", updatedArticle);
+        return createResponse(200, "success", updatedArticle);
     } catch (error) {
         console.error("Error updating article:", error);
         return createResponse(500, "Internal Server Error");
     }
 };
+
+
