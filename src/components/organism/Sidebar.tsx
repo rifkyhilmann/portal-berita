@@ -6,6 +6,8 @@ import Each from "@/utils/each.utils"
 import SidebarMenu from "../atoms/SidebarMenu"
 import { MdLogout } from "react-icons/md"
 import { signOut } from "next-auth/react"
+import Image from "next/image"
+import { Logo } from "@/assets/icons"
 
 
 const Sidebar = ({
@@ -22,8 +24,15 @@ const Sidebar = ({
             ${isOpen ? "translate-x-0" : "-translate-x-full"} 
             lg:translate-x-0 ${isOpen ? "lg:hidden" : ""} bg-white shadow-sm`}
         >
-            <div className="h-12 w-full bg-black"></div>
-            <div className="flex flex-col gap-3 px-4 py-8">
+            <div className="h-16 w-full flex items-center  gap-3 pl-4">
+                <Image 
+                    src={Logo}
+                    alt="Logo"
+                    className="h-12 w-12"
+                />
+                <p className="text-lg font-semibold">FlashNews</p>
+            </div>
+            <div className="flex flex-col gap-3 px-4 py-5">
                 <Each 
                     of={DataMenuSidebar}
                     render={(item, i) => (

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { SpinnerWhite } from "@/assets/gif";
 import Image from "next/image";
 import { LoginSchema } from "@/validation/auth.schema";
+import { Logo } from "@/assets/icons";
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -52,9 +53,14 @@ const Page = () => {
     }
     return (
         <div className="w-full h-screen bg-gray-100 flex items-center justify-center">
-            <div className="w-[90%] max-w-[350px] h-max bg-white rounded shadow px-10 py-10 flex flex-col gap-5">
-                <div className="h-12 w-full bg-black">
-
+            <div className="w-[90%] max-w-[350px] h-max bg-white rounded shadow px-10 pt-7 pb-10 flex flex-col gap-5">
+                <div className="h-16 w-full flex items-center justify-center  gap-3 pl-4">
+                    <Image 
+                        src={Logo}
+                        alt="Logo"
+                        className="h-12 w-12"
+                    />
+                    <p className="text-lg font-semibold">FlashNews</p>
                 </div>
                 
                 <Formik 
