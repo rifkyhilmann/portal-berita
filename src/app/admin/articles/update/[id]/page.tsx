@@ -49,21 +49,26 @@ const Page = () => {
         category_id: string; 
         published_at: string; 
         status: string; 
-    }, { resetForm }: { resetForm: () => void }) => {
+    }) => {
         try {
             const formData = new FormData();
             formData.append("title", values.title);
             formData.append("slug", values.slug);
             formData.append("content", values.content);
             formData.append("category_id", values.category_id);
-            formData.append("published_at", values.published_at);
             formData.append("status", values.status);
+            
+            const publishedAtDatetime = values.published_at 
+            ? new Date(`${values.published_at}T00:00:00Z`).toISOString() 
+            : "";
+
+            formData.append("published_at", publishedAtDatetime);
 
             if (image) {
                 formData.append("image_url", image);
             }
 
-            const response = await refetch('/api/articles', formData); 
+            const response = await refetch(`/api/articles?id=${id}`, formData); 
 
             if (response?.status === 200) {
                 showToast("success", "Success!");

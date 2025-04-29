@@ -149,7 +149,8 @@ export const DELETE = async (request: Request) => {
 export const PUT = async (request: Request) => {
     try {
         const formData = await request.formData();
-        const id = formData.get("id") as string;
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get("id");
         
         if (!id) {
             return createResponse(400, "ID is required");
@@ -176,14 +177,14 @@ export const PUT = async (request: Request) => {
         if (publishedAtRaw && typeof publishedAtRaw === "string") {
             published_at = new Date(publishedAtRaw);
             if (isNaN(published_at.getTime())) {
-                return createResponse(400, "Invalid date format for published_at");
+                return createResponse(406, "Invalid date format for published_at");
             }
         }
 
         let status: Status | undefined;
         if (statusValue && typeof statusValue === "string") {
             if (!Object.values(Status).includes(statusValue as Status)) {
-                return createResponse(400, "Invalid status provided");
+                return createResponse(405, "Invalid status provided");
             }
             status = statusValue as Status;
         }
@@ -192,7 +193,7 @@ export const PUT = async (request: Request) => {
         if (imageFile) {
             image_url = await uploadFile(imageFile);
             if (!image_url) {
-                return createResponse(400, "Failed to upload image");
+                return createResponse(408, "Failed to upload image");
             }
         }
 
